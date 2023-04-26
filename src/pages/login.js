@@ -2,7 +2,7 @@ import { Layout } from '@/components/Layout'
 import Link from 'next/link'
 import React from 'react'
 
-const loginPage = () => {
+const LoginPage = () => {
     return (
         <Layout>
             <h1 className='text-2xl text-gray-400 font-light'>Login Page</h1>
@@ -66,4 +66,4 @@ const loginPage = () => {
     )
 }
 
-export default loginPage
+export default LoginPage
