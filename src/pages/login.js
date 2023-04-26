@@ -2,11 +2,29 @@ import { Layout } from '@/components/Layout'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Link from 'next/link'
-import React from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 
+const AUTENTICAR_USUARIO = gql`
+    mutation autenticarUsuario($input: AutenticarInput){
+        autenticarUsuario(input:$input){
+            token
+        }
+    }
+`
 
 const LoginPage = () => {
+
+    // State para el mensaje
+    const [mensaje, setMensaje] = useState(null)
+
+    // Router
+    const router = useRouter()
+
+    // Mutation para crear nuevos usuarios en apollo
+    const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO)
 
     // Validacion del formulario
     const formik = useFormik({
@@ -21,10 +39,47 @@ const LoginPage = () => {
         onSubmit: async valores => {
             // console.log('enviando')
             // console.log(valores)
+
+            try {
+                const { data } = await autenticarUsuario({
+                    variables: {
+                        input: {
+                            email: valores.email,
+                            password: valores.password
+                        }
+                    }
+                })
+
+                console.log(data)
+                setMensaje(`Autenticando...`)
+
+                // Guardar token en localstorage
+                const { token } = data.autenticarUsuario
+                localStorage.setItem('token', token)
+
+                // Redireccionar a clientes
+                router.push('/')
+                // setTimeout(() => {
+
+                // }, 3000);
+
+            } catch (error) {
+                setMensaje(error.message.replace('ApolloError: ', ''))
+                setTimeout(() => {
+                    setMensaje(null)
+                }, 3000);
+                // console.log(error);
+            }
         }
     })
 
-
+    const mostrarMensaje = () => {
+        return (
+            <div className={mensaje.includes('correctamente') ? 'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 animate-bounce' : 'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 animate-bounce'}>
+                <p>{mensaje}</p>
+            </div>
+        )
+    }
 
     return (
         <Layout>
@@ -33,8 +88,8 @@ const LoginPage = () => {
             <div className='flex justify-center mt-5 '>
                 <div className='w-full max-w-sm'>
                     <form
-                        className='bg-white rounded shadow-md px-8 py-6 flex flex-col gap-2'
-                        onSubmit={e => e.preventDefault()}
+                        className='bg-white rounded shadow-md px-8 py-6  '
+                        onSubmit={formik.handleSubmit}
                     >
                         <div className='mb-4 text-start'>
                             <label
@@ -51,8 +106,6 @@ const LoginPage = () => {
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-
-
                             />
                         </div>
                         {
@@ -79,7 +132,6 @@ const LoginPage = () => {
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-
                             />
                         </div>
 
@@ -93,19 +145,21 @@ const LoginPage = () => {
                         }
 
                         <input
-
                             type='submit'
                             className='bg-gray-800 w-full mt-5 p-2 text-white rounded-xl  hover:bg-gray-900 transition-all duration-200 ease-in-out'
                             value='Iniciar Sesión'
                         />
 
                         {/* Si ya tiene cuenta */}
-                        <Link
-                            className='text-gray-400 text-sm hover:text-gray-600'
-                            href='/nueva-cuenta'>
-                            ¿Aun no tienes cuenta?
-                        </Link>
+                        <div className='text-right pt-2'>
+                            <Link
+                                className='text-gray-400 text-sm hover:text-gray-600'
+                                href='/nueva-cuenta'>
+                                ¿Aun no tienes cuenta?
+                            </Link>
+                        </div>
                     </form>
+                    {mensaje && mostrarMensaje()}
                 </div>
             </div>
 

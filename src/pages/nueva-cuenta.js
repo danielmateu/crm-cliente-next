@@ -95,7 +95,7 @@ const NuevaCuentaPage = () => {
             <div className='flex justify-center mt-5'>
                 <div className='w-full max-w-sm'>
                     <form
-                        className='bg-white rounded shadow-md px-8 py-6 flex flex-col gap-2'
+                        className='bg-white rounded shadow-md px-8 py-6'
                         onSubmit={formik.handleSubmit}
 
                     >
@@ -209,11 +209,13 @@ const NuevaCuentaPage = () => {
                             value='Crear Cuenta'
                         />
                         {/* Si ya tiene cuenta */}
-                        <Link
-                            className='text-gray-400 text-sm hover:text-gray-600'
-                            href='/login'>
-                            ¿Ya tienes cuenta?
-                        </Link>
+                        <div className='text-right pt-2'>
+                            <Link
+                                className='text-gray-400 text-sm hover:text-gray-600'
+                                href='/login'>
+                                ¿Ya tienes cuenta?
+                            </Link>
+                        </div>
                     </form>
                     {mensaje && mostrarMensaje()}
 
