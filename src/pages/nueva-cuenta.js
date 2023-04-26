@@ -2,8 +2,27 @@ import { Layout } from '@/components/Layout'
 import { useFormik } from 'formik'
 import Link from 'next/link'
 import * as Yup from 'yup'
+import { useQuery, useMutation, gql } from '@apollo/client'
+import { useState } from 'react'
+
+const NUEVA_CUENTA = gql`
+    mutation nuevoUsuario($input: UsuarioInput){
+        nuevoUsuario(input: $input){
+            id
+            nombre
+            apellido
+            email
+        }
+    }
+`
 
 const NuevaCuentaPage = () => {
+
+    // state para el mensaje
+    const [mensaje, setMensaje] = useState(null)
+
+    // Mutation para crear nuevos usuarios
+    const [nuevoUsuario] = useMutation(NUEVA_CUENTA)
 
     // Validacion del formulario
     const formik = useFormik({
@@ -14,23 +33,58 @@ const NuevaCuentaPage = () => {
             password: ''
         },
         validationSchema: Yup.object({
-            nombre: Yup.string()
-                .required('El nombre es obligatorio')
-                .min(3, 'El nombre debe ser de al menos 3 caracteres'),
-            apellido: Yup.string()
-                .required('El apellido es obligatorio').min(3, 'El apellido debe ser de al menos 3 caracteres'),
-            email: Yup.string()
-                .email('El email no es valido')
-                .required('El email es obligatorio'),
-            password: Yup.string()
-                .required('El password no puede ir vacio')
-                .min(6, 'El password debe ser de al menos 6 caracteres')
+            nombre: Yup.string().required('El nombre es obligatorio').min(3, 'El nombre debe ser de al menos 3 caracteres'),
+            apellido: Yup.string().required('El apellido es obligatorio').min(3, 'El apellido debe ser de al menos 3 caracteres'),
+            email: Yup.string().email('El email no es valido').required('El email es obligatorio'),
+            password: Yup.string().required('El password no puede ir vacio').min(6, 'El password debe ser de al menos 6 caracteres')
         }),
-        onSubmit: valores => {
+        onSubmit: async valores => {
             console.log('enviando')
             console.log(valores)
+
+            const { nombre, apellido, email, password } = valores
+
+            try {
+                const { data } = await nuevoUsuario({
+                    variables: {
+                        input: {
+                            nombre,
+                            apellido,
+                            email,
+                            password
+                        }
+                    }
+                })
+
+                // console.log(data);
+                // Usuario creado correctamente
+                // Mostrar el mensaje durante 2 segundos
+                setMensaje(`Se creo correctamente el usuario: ${data.nuevoUsuario.nombre}`)
+                setTimeout(() => {
+                    setMensaje(null)
+                }, 2000)
+
+                // Redireccionar a login
+            } catch (error) {
+                setMensaje(error.message.replace('ApolloError: ', ''))
+                setTimeout(() => {
+                    setMensaje(null)
+                }, 2000)
+                // console.log(error);
+            }
         },
     })
+
+    // if (loading) return 'Cargando...'
+
+    const mostrarMensaje = () => {
+        return (
+            <div className={mensaje.includes('correctamente') ? 'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 animate-bounce' : 'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 animate-bounce'}>
+                <p>{mensaje}</p>
+            </div>
+        )
+    }
+
     return (
         <Layout>
             <h1 className='text-2xl text-gray-400 font-light'>Nueva Cuenta</h1>
@@ -158,6 +212,7 @@ const NuevaCuentaPage = () => {
                             ¿Ya tienes cuenta?
                         </Link>
                     </form>
+                    {mensaje && mostrarMensaje()}
 
                 </div>
             </div>
