@@ -1,8 +1,12 @@
 import Head from "next/head"
 import { Sidebar } from "./Sidebar"
+import { useRouter } from "next/router"
 
 
 export const Layout = ({ children }) => {
+
+    const router = useRouter()
+
     return (
         <>
             <Head>
@@ -12,14 +16,21 @@ export const Layout = ({ children }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className="flex bg-gray-600 min-h-screen">
-                <Sidebar />
-
-                <main className="sm:min-h-screen p-5">
-
+            {router.pathname === "/login" || router.pathname === '/nueva-cuenta'? (
+                <div className="bg-gray-800 min-h-screen flex flex-col justify-center text-center">
                     {children}
-                </main>
-            </div>
+                </div>
+            ) : (
+                <div className="flex bg-gray-600 min-h-screen">
+                    <Sidebar />
+
+                    <main className="sm:min-h-screen p-5">
+
+                        {children}
+                    </main>
+                </div>
+            )}
+
 
         </>
     )
