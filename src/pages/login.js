@@ -1,4 +1,5 @@
 import { Layout } from '@/components/Layout'
+import Link from 'next/link'
 import React from 'react'
 
 const loginPage = () => {
@@ -12,7 +13,7 @@ const loginPage = () => {
                         className='bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4'
                         onSubmit={e => e.preventDefault()}
                     >
-                        <div className='mb-4'>
+                        <div className='mb-4 text-start'>
                             <label
                                 className='block text-gray-700 text-sm font-bold mb-2'
                                 htmlFor='email'
@@ -28,7 +29,7 @@ const loginPage = () => {
                             />
                         </div>
 
-                        <div className='mb-4'>
+                        <div className='mb-4 text-start'>
                             <label
                                 className='block text-gray-700 text-sm font-bold mb-2'
                                 htmlFor='password'
@@ -47,13 +48,20 @@ const loginPage = () => {
                         <input
 
                             type='submit'
-                            className='bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900'
+                            className='bg-gray-800 w-full mt-5 p-2 text-white rounded-xl  hover:bg-gray-900 transition-all duration-200 ease-in-out'
                             value='Iniciar Sesión'
                         />
+
+                        {/* Si ya tiene cuenta */}
+                        <Link
+                            className='text-gray-400 text-sm hover:text-gray-600'
+                            href='/nueva-cuenta'>
+                            ¿Aun no tienes cuenta?
+                        </Link>
                     </form>
                 </div>
             </div>
-            
+
         </Layout>
     )
 }
