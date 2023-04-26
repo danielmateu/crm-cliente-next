@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <h1>Desde Home</h1>
+        <h1 className='text-2xl text-gray-400 font-light'>Clientes</h1>
       </Layout>
     </>
   )

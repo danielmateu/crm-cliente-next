@@ -12,9 +12,13 @@ export const Layout = ({ children }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className="bg-gray-600 min-h-screen">
+            <div className="flex bg-gray-600 min-h-screen">
                 <Sidebar />
-                {children}
+
+                <main className="sm:min-h-screen p-5">
+
+                    {children}
+                </main>
             </div>
 
         </>
