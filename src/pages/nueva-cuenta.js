@@ -4,6 +4,7 @@ import Link from 'next/link'
 import * as Yup from 'yup'
 import { useQuery, useMutation, gql } from '@apollo/client'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const NUEVA_CUENTA = gql`
     mutation nuevoUsuario($input: UsuarioInput){
@@ -24,6 +25,8 @@ const NuevaCuentaPage = () => {
     // Mutation para crear nuevos usuarios
     const [nuevoUsuario] = useMutation(NUEVA_CUENTA)
 
+    const router = useRouter()
+
     // Validacion del formulario
     const formik = useFormik({
         initialValues: {
@@ -39,8 +42,8 @@ const NuevaCuentaPage = () => {
             password: Yup.string().required('El password no puede ir vacio').min(6, 'El password debe ser de al menos 6 caracteres')
         }),
         onSubmit: async valores => {
-            console.log('enviando')
-            console.log(valores)
+            // console.log('enviando')
+            // console.log(valores)
 
             const { nombre, apellido, email, password } = valores
 
@@ -56,11 +59,11 @@ const NuevaCuentaPage = () => {
                     }
                 })
 
-                // console.log(data);
                 // Usuario creado correctamente
                 // Mostrar el mensaje durante 2 segundos
                 setMensaje(`Se creo correctamente el usuario: ${data.nuevoUsuario.nombre}`)
                 setTimeout(() => {
+                    router.push('/login')
                     setMensaje(null)
                 }, 2000)
 
@@ -92,7 +95,7 @@ const NuevaCuentaPage = () => {
             <div className='flex justify-center mt-5'>
                 <div className='w-full max-w-sm'>
                     <form
-                        className='bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4'
+                        className='bg-white rounded shadow-md px-8 py-6 flex flex-col gap-2'
                         onSubmit={formik.handleSubmit}
 
                     >
