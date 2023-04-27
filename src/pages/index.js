@@ -12,6 +12,7 @@ query obtenerClientesVendedor{
     apellido
     empresa
     email
+    telefono
   }
 }
 `
@@ -21,7 +22,7 @@ export const Home = () => {
   const router = useRouter()
 
   const { data, loading, error } = useQuery(OBTENER_CLIENTES_VENDEDOR)
-  console.log(data)
+  // console.log(data)
 
   if (loading) return (
     <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Cargando...</h4>
@@ -48,6 +49,8 @@ export const Home = () => {
                   <th className='w-1/5 py-2'>Nombre</th>
                   <th className='w-1/5 py-2'>Empresa</th>
                   <th className='w-1/5 py-2'>Email</th>
+                  <th className='w-1/5 py-2'>Teléfono</th>
+
                 </tr>
               </thead>
               <tbody className='bg-white'>
@@ -56,6 +59,7 @@ export const Home = () => {
                     <td className='border px-4 py-2'>{cliente.nombre} {cliente.apellido}</td>
                     <td className='border px-4 py-2'>{cliente.empresa}</td>
                     <td className='border px-4 py-2'>{cliente.email}</td>
+                    <td className='border px-4 py-2'>{cliente.telefono}</td>
                   </tr>
                 ))}
               </tbody>

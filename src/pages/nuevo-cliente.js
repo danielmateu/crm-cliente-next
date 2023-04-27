@@ -1,13 +1,26 @@
 import { Layout } from '@/components/Layout'
-import { Formik, useFormik } from 'formik'
+import { gql, useMutation } from '@apollo/client'
+import { useFormik } from 'formik'
 import { useState } from 'react'
 import * as Yup from 'yup'
 
+const NUEVO_CLIENTE = gql`
+    mutation nuevoCliente ($input: ClienteInput){
+        nuevoCliente(input: $input){
+            id
+            nombre
+            apellido
+            empresa
+            email
+            telefono
+    }
+}
+`
 const NuevoclientePage = () => {
 
     const [mensaje, setMensaje] = useState(null)
 
-
+    const [nuevoCliente] = useMutation(NUEVO_CLIENTE)
 
     const formik = useFormik({
         initialValues: {
@@ -18,17 +31,69 @@ const NuevoclientePage = () => {
             telefono: ''
         },
         validationSchema: Yup.object({
-            nombre: Yup.string().required('El nombre es obligatorio').min(3, 'El nombre debe tener al menos 3 caracteres'),
-            apellido: Yup.string().required('El apellido es obligatorio').min(3, 'El apellido debe tener al menos 3 caracteres'),
-            empresa: Yup.string().required('La empresa es obligatoria').min(3, 'La empresa debe tener al menos 3 caracteres'),
+            nombre: Yup.string()
+                .required('El nombre es obligatorio')
+                .min(3, 'El nombre debe tener al menos 3 caracteres'),
+            apellido: Yup.string()
+                .required('El apellido es obligatorio')
+                .min(3, 'El apellido debe tener al menos 3 caracteres'),
+            empresa: Yup.string()
+                .required('La empresa es obligatoria')
+                .min(3, 'La empresa debe tener al menos 3 caracteres'),
             email: Yup.string().email('El email no es valido').required('El email es obligatorio'),
-            telefono: Yup.string().required('El telefono es obligatorio').min(10, 'El telefono debe tener al menos 10 caracteres')
+            telefono: Yup.string()
+                .required('El telefono es obligatorio')
+                .min(10, 'El telefono debe tener al menos 10 caracteres')
         }),
-        onSubmit: valores => {
-            console.log(valores)
+        onSubmit: async valores => {
+
+            const { nombre, apellido, empresa, email, telefono } = valores
+
+            try {
+                const { data } = await nuevoCliente({
+                    variables: {
+                        input: {
+                            nombre,
+                            apellido,
+                            empresa,
+                            email,
+                            telefono
+                        }
+                    }
+                })
+
+                setMensaje(`Cliente ${data.nuevoCliente.nombre} ${data.nuevoCliente.apellido} creado correctamente`)
+                setTimeout(() => {
+                    // Limpiar el formulario
+                    formik.handleReset()
+                    setMensaje(null)
+                }, 3000)
+
+            } catch (error) {
+                setMensaje(error.message.replace('GraphQL error: ', ''))
+                setTimeout(() => {
+
+                    setMensaje(null)
+                }, 3000)
+                console.log(error);
+            }
+
         }
     })
 
+    const mostrarMensaje = () => {
+        return (
+            // <div className='bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto'>
+            <div className={
+                mensaje.includes('correctamente') ?
+                    'bg-green-400 py-2 px-3 w-full my-3 max-w-sm text-center mx-auto' :
+                    'bg-red-400 py-2 px-3 w-full my-3 max-w-sm text-center mx-auto'
+            }>
+                <p>{mensaje}</p>
+            </div>
+        )
+
+    }
 
     return (
         <Layout>
@@ -38,7 +103,7 @@ const NuevoclientePage = () => {
                 <div className='w-full max-w-lg'>
                     <form
                         onSubmit={formik.handleSubmit}
-                        className='bg-white shadow-md px-8 pt-6 pb-8 mb-4'
+                        className='bg-white shadow-md px-8 pt-6 pb-8 mb-4 rounded-xl'
                     >
                         <div className='mb-4'>
                             <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='nombre'>
@@ -164,9 +229,12 @@ const NuevoclientePage = () => {
                             type='submit'
                             className='bg-gray-800 w-full mt-5 p-2 text-white rounded-xl  hover:bg-gray-900 transition-all duration-200 ease-in-out'
                             value='Registrar cliente'
-                            
+
                         />
                     </form>
+                    {
+                        mensaje && mostrarMensaje()
+                    }
                 </div>
             </div>
         </Layout>
