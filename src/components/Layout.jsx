@@ -2,7 +2,6 @@ import Head from "next/head"
 import { Sidebar } from "./Sidebar"
 import { useRouter } from "next/router"
 
-
 export const Layout = ({ children }) => {
 
     const router = useRouter()
@@ -21,17 +20,14 @@ export const Layout = ({ children }) => {
                     {children}
                 </div>
             ) : (
-                <div className="flex bg-gray-600 min-h-screen">
+                <div className="flex flex-col md:flex-row bg-gray-600 min-h-screen">
                     <Sidebar />
 
                     <main className="sm:min-h-screen p-5">
-
                         {children}
                     </main>
                 </div>
             )}
-
-
         </>
     )
 }

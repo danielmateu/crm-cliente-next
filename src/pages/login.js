@@ -16,13 +16,10 @@ const AUTENTICAR_USUARIO = gql`
 `
 
 const LoginPage = () => {
-
     // State para el mensaje
     const [mensaje, setMensaje] = useState(null)
-
     // Router
     const router = useRouter()
-
     // Mutation para crear nuevos usuarios en apollo
     const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO)
 
@@ -39,7 +36,6 @@ const LoginPage = () => {
         onSubmit: async valores => {
             // console.log('enviando')
             // console.log(valores)
-
             try {
                 const { data } = await autenticarUsuario({
                     variables: {
@@ -50,7 +46,7 @@ const LoginPage = () => {
                     }
                 })
 
-                console.log(data)
+                // console.log(data)
                 setMensaje(`Autenticando...`)
 
                 // Guardar token en localstorage
