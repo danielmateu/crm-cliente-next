@@ -1,6 +1,7 @@
 import { Layout } from '@/components/Layout'
 import { gql, useMutation } from '@apollo/client'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import * as Yup from 'yup'
 
@@ -16,11 +17,40 @@ const NUEVO_CLIENTE = gql`
     }
 }
 `
+const OBTENER_CLIENTES_VENDEDOR = gql`
+query obtenerClientesVendedor{
+    obtenerClientesVendedor{
+        id
+        nombre
+        apellido
+        empresa
+        email
+        telefono
+    }
+    }
+`
+
+
 const NuevoclientePage = () => {
 
     const [mensaje, setMensaje] = useState(null)
 
-    const [nuevoCliente] = useMutation(NUEVO_CLIENTE)
+    const [nuevoCliente] = useMutation(NUEVO_CLIENTE, {
+        update(cache, { data: { nuevoCliente } }) {
+            // Obtener el objeto de cache que deseamos actualizar
+            const { obtenerClientesVendedor } = cache.readQuery({ query: OBTENER_CLIENTES_VENDEDOR })
+
+            // Reescribimos el cache ( el cache nunca se debe modificar )
+            cache.writeQuery({
+                query: OBTENER_CLIENTES_VENDEDOR,
+                data: {
+                    obtenerClientesVendedor: [...obtenerClientesVendedor, nuevoCliente]
+                }
+            })
+        }
+    })
+
+    const router = useRouter()
 
     const formik = useFormik({
         initialValues: {
@@ -69,6 +99,9 @@ const NuevoclientePage = () => {
                     setMensaje(null)
                 }, 3000)
 
+                // Redireccionar hacia clientes
+                router.push('/')
+
             } catch (error) {
                 setMensaje(error.message.replace('GraphQL error: ', ''))
                 setTimeout(() => {
@@ -77,7 +110,6 @@ const NuevoclientePage = () => {
                 }, 3000)
                 console.log(error);
             }
-
         }
     })
 
