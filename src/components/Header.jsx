@@ -24,10 +24,14 @@ export const Header = () => {
     // Proteger que no accedamos a data antes de tener resultados
     if(loading) return null;
 
+    // Si no hay información
+    if(!data) {
+        return router.push('/login');
+    }
+
     const { nombre, apellido } = data?.obtenerUsuario;
 
     const cerrarSesion = () => {
-        // console.log('Cerrar Sesión');
         // Eliminar el token
         localStorage.removeItem('token');
 
@@ -40,7 +44,7 @@ export const Header = () => {
             <button
                 onClick={cerrarSesion}
                 type="button"
-                className="bg-red-400 py-2 px-5 rounded text-white hover:bg-red-600 transition-all ease-in-out"
+                className="bg-red-400 hover:bg-red-600 py-2 px-5 rounded text-white  transition-all ease-in-out"
             >
                 Cerrar Sesión
             </button>
