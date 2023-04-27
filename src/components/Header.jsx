@@ -1,10 +1,30 @@
-import React from 'react'
+// import { obtenerUsuario } from "@/helpers/obtenerUsuario";
+import { useRouter } from "next/router";
+
+
 
 export const Header = () => {
+
+    const router = useRouter();
+
+    // Obtener el nombre del usuario autenticado con el jwt
+    // const usuario = obtenerUsuario();
+
+
+
+    const cerrarSesion = () => {
+        // console.log('Cerrar Sesión');
+        // Eliminar el token
+        localStorage.removeItem('token');
+
+        router.push('/login');
+    }
+
     return (
-        <header className="flex justify-between items-center">
-            <p className="text-2xl font-light text-white">Hola: Daniel</p>
+        <header className="pb-4 flex flex-wrap gap-1 justify-between items-center">
+            <p className="text-2xl font-light text-white">Hola: Dani</p>
             <button
+                onClick={cerrarSesion}
                 type="button"
                 className="bg-red-400 py-2 px-5 rounded text-white hover:bg-red-600 transition-all ease-in-out"
             >

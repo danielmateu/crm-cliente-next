@@ -16,7 +16,6 @@ const NUEVA_CUENTA = gql`
         }
     }
 `
-
 const NuevaCuentaPage = () => {
 
     // state para el mensaje
