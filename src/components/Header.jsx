@@ -1,16 +1,23 @@
 // import { obtenerUsuario } from "@/helpers/obtenerUsuario";
+import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
-
+const OBTENER_USUARIO = gql`
+    query obtenerUsuario($token: String!){
+        obtenerUsuario(token: $token){
+            id
+            nombre
+            apellido
+        }
+    }
+`
 
 export const Header = () => {
 
     const router = useRouter();
 
-    // Obtener el nombre del usuario autenticado con el jwt
-    // const usuario = obtenerUsuario();
-
-
+    // Obtener el nombre del usuario desde apollo
+    const { data, loading, error } = useQuery(OBTENER_USUARIO);
 
     const cerrarSesion = () => {
         // console.log('Cerrar Sesión');

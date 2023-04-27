@@ -2,7 +2,7 @@ import { Layout } from '@/components/Layout'
 import { useFormik } from 'formik'
 import Link from 'next/link'
 import * as Yup from 'yup'
-import { useQuery, useMutation, gql } from '@apollo/client'
+import { useMutation, gql } from '@apollo/client'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -62,11 +62,11 @@ const NuevaCuentaPage = () => {
                 // Mostrar el mensaje durante 2 segundos
                 setMensaje(`Se creo correctamente el usuario: ${data.nuevoUsuario.nombre}`)
                 setTimeout(() => {
+                    // Redireccionar a login
                     router.push('/login')
                     setMensaje(null)
                 }, 2000)
 
-                // Redireccionar a login
             } catch (error) {
                 setMensaje(error.message.replace('ApolloError: ', ''))
                 setTimeout(() => {

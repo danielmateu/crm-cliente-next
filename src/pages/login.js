@@ -1,11 +1,13 @@
-import { Layout } from '@/components/Layout'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import Link from 'next/link'
-import { gql, useMutation } from '@apollo/client'
 import { useState } from 'react'
+
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+import { gql, useMutation } from '@apollo/client'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+import { Layout } from '@/components/Layout'
 
 const AUTENTICAR_USUARIO = gql`
     mutation autenticarUsuario($input: AutenticarInput){
@@ -20,7 +22,7 @@ const LoginPage = () => {
     const [mensaje, setMensaje] = useState(null)
     // Router
     const router = useRouter()
-    // Mutation para crear nuevos usuarios en apollo
+    // Mutation para autenticar usuarios en apollo
     const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO)
 
     // Validacion del formulario
@@ -36,18 +38,19 @@ const LoginPage = () => {
         onSubmit: async valores => {
             // console.log('enviando')
             // console.log(valores)
+            const { email, password } = valores
             try {
                 const { data } = await autenticarUsuario({
                     variables: {
                         input: {
-                            email: valores.email,
-                            password: valores.password
+                            email,
+                            password
                         }
                     }
                 })
 
-                // console.log(data)
-                setMensaje(`Autenticando...`)
+                console.log(data)
+                setMensaje(`Logueado correctamente...`)
 
                 // Guardar token en localstorage
                 const { token } = data.autenticarUsuario
