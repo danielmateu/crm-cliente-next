@@ -17,7 +17,9 @@ export const Header = () => {
     const router = useRouter();
 
     // Obtener el nombre del usuario desde apollo
-    const { data, loading, error } = useQuery(OBTENER_USUARIO);
+    const { data, loading, error } = useQuery(OBTENER_USUARIO, {
+        fetchPolicy: "no-cache"
+    });
 
     // console.log(data);
 
