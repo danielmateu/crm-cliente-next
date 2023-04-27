@@ -3,13 +3,13 @@ import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 
 const OBTENER_USUARIO = gql`
-    query obtenerUsuario($token: String!){
-        obtenerUsuario(token: $token){
+    query obtenerUsuario{
+        obtenerUsuario{
             id
             nombre
             apellido
-        }
     }
+}
 `
 
 export const Header = () => {
@@ -18,6 +18,13 @@ export const Header = () => {
 
     // Obtener el nombre del usuario desde apollo
     const { data, loading, error } = useQuery(OBTENER_USUARIO);
+
+    // console.log(data);
+
+    // Proteger que no accedamos a data antes de tener resultados
+    if(loading) return null;
+
+    const { nombre, apellido } = data?.obtenerUsuario;
 
     const cerrarSesion = () => {
         // console.log('Cerrar Sesión');
@@ -29,7 +36,7 @@ export const Header = () => {
 
     return (
         <header className="pb-4 flex flex-wrap gap-1 justify-between items-center">
-            <p className="text-2xl font-light text-white">Hola: Dani</p>
+            <p className="font-light text-white">Hola: { nombre } { nombre ? '😊' : ''}</p>
             <button
                 onClick={cerrarSesion}
                 type="button"
