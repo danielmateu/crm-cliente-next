@@ -8,6 +8,7 @@ import Swal from "sweetalert2"
 const OBTENER_CLIENTE = gql`
 query obtenerCliente($id: ID!) {
     obtenerCliente(id : $id){
+        id
         nombre
         apellido
         email
@@ -19,8 +20,12 @@ query obtenerCliente($id: ID!) {
 const ACTUALIZAR_CLIENTE = gql`
     mutation actualizarCliente($id : ID!, $input: ClienteInput){
         actualizarCliente(id: $id, input: $input){
+            id
             nombre
+            apellido
             email
+            telefono
+            empresa
         }
 }
 `
@@ -37,7 +42,7 @@ const EditarClientePage = () => {
     });
 
     // Actualizar el cliente
-    const [actualizarClienteMutation] = useMutation(ACTUALIZAR_CLIENTE)
+    const [actualizarClienteMutation] = useMutation(ACTUALIZAR_CLIENTE, {})
 
     // Schema de validación
     const schemaValidacion = Yup.object({
@@ -83,7 +88,7 @@ const EditarClientePage = () => {
                     }
                 }
             })
-            // console.log(data)
+
             // Mostrar alerta
             Swal.fire(
                 'Actualizado!',
@@ -95,9 +100,7 @@ const EditarClientePage = () => {
         } catch (error) {
             console.log(error)
         }
-
     }
-
 
     return (
         <Layout>
@@ -110,7 +113,7 @@ const EditarClientePage = () => {
                         enableReinitialize
                         initialValues={obtenerCliente}
                         onSubmit={async (valores) => {
-                            console.log(valores);
+                            // console.log(valores);
                             actualizarInfoCliente(valores)
                         }
                         }

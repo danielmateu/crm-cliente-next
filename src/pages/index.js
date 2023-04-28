@@ -3,6 +3,7 @@ import { Layout } from '@/components/Layout'
 import { gql, useQuery } from '@apollo/client'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import 'animate.css';
 
 
 const OBTENER_CLIENTES_VENDEDOR = gql`
@@ -49,27 +50,29 @@ export const Home = () => {
               ) : (
                 <>
                   <h1 className='text-2xl text-gray-400 font-light'>Clientes</h1>
+                  <div className='animate__animated animate__fadeIn' >
 
-                  <table className='table-auto shadow-md mt-6'>
-                    <thead className='bg-gray-800'>
-                      <tr className='text-white'>
-                        <th className='w-1/5 py-2'>Nombre</th>
-                        <th className='w-1/5 py-2'>Empresa</th>
-                        <th className='w-1/5 py-2'>Email</th>
-                        <th className='w-1/5 py-2'>Teléfono</th>
-                        <th className='w-1/5 py-2'>Opciones</th>
+                    <table className='table-auto shadow-md mt-6 '>
+                      <thead className='bg-gray-800'>
+                        <tr className='text-white'>
+                          <th className='w-1/5 py-2'>Nombre</th>
+                          <th className='w-1/5 py-2'>Empresa</th>
+                          <th className='w-1/5 py-2'>Email</th>
+                          <th className='w-1/5 py-2'>Teléfono</th>
+                          <th className='w-1/5 py-2'>Opciones</th>
 
-                      </tr>
-                    </thead>
-                    <tbody className='bg-white'>
-                      {data.obtenerClientesVendedor.map(cliente => (
-                        <Cliente
-                          key={cliente.id}
-                          cliente={cliente}
-                        />
-                      ))}
-                    </tbody>
-                  </table>
+                        </tr>
+                      </thead>
+                      <tbody className='bg-white'>
+                        {data.obtenerClientesVendedor.map(cliente => (
+                          <Cliente
+                            key={cliente.id}
+                            cliente={cliente}
+                          />
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </>
               )
             }

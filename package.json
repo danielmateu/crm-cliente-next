@@ -11,6 +11,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.12",
     "@next/font": "13.3.1",
+    "animate.css": "^4.1.1",
     "apollo-link-context": "^1.0.20",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
