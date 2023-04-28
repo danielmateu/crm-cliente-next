@@ -3,7 +3,7 @@ import { gql, useMutation, useQuery } from "@apollo/client"
 import { Formik } from "formik"
 import { useRouter } from "next/router"
 import * as Yup from 'yup'
-
+import Swal from "sweetalert2"
 
 const OBTENER_CLIENTE = gql`
 query obtenerCliente($id: ID!) {
@@ -16,7 +16,6 @@ query obtenerCliente($id: ID!) {
     }
 }
 `
-
 const ACTUALIZAR_CLIENTE = gql`
     mutation actualizarCliente($id : ID!, $input: ClienteInput){
         actualizarCliente(id: $id, input: $input){
@@ -25,7 +24,6 @@ const ACTUALIZAR_CLIENTE = gql`
         }
 }
 `
-
 const EditarClientePage = () => {
     // Obtener el ID actual
     const router = useRouter()
@@ -36,48 +34,89 @@ const EditarClientePage = () => {
         variables: {
             id
         }
-    })
+    });
 
-
-    console.log(data)
-    // console.log(loading)
-    // console.log(error)
+    // Actualizar el cliente
+    const [actualizarClienteMutation] = useMutation(ACTUALIZAR_CLIENTE)
 
     // Schema de validación
     const schemaValidacion = Yup.object({
         nombre: Yup.string()
-            .required('El nombre del cliente es obligatorio'),
+            .required('El nombre es obligatorio')
+            .min(3, 'El nombre debe tener al menos 3 caracteres'),
         apellido: Yup.string()
-            .required('El apellido del cliente es obligatorio'),
+            .required('El apellido es obligatorio')
+            .min(3, 'El apellido debe tener al menos 3 caracteres'),
         empresa: Yup.string()
-            .required('El campo empresa es obligatorio'),
-        email: Yup.string()
-            .email('Email no válido')
-            .required('El email del cliente es obligatorio'),
+            .required('La empresa es obligatoria')
+            .min(3, 'La empresa debe tener al menos 3 caracteres'),
+        email: Yup.string().email('El email no es valido').required('El email es obligatorio'),
+        telefono: Yup.string()
+            .required('El telefono es obligatorio')
+            .min(10, 'El telefono debe tener al menos 10 caracteres')
     })
 
-    if (loading) return 'Cargando...';
+    // console.log(data)
+    // console.log(loading)
+    // console.log(error)
 
-    // Actualizar el cliente
-    // const [actualizarCliente] = useMutation(ACTUALIZAR_CLIENTE)
+    if (loading) return <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Cargando...</h4>;
 
-    // Schema de validación
+    // console.log(data.obtenerCliente.nombre)
+
+    const { obtenerCliente } = data
+
+    // Modifica el cliente en la base de datos
+    const actualizarInfoCliente = async valores => {
+        const { nombre, apellido, empresa, email, telefono } = valores
+
+        try {
+            const { data } = await actualizarClienteMutation({
+                variables: {
+                    id,
+                    input: {
+                        nombre,
+                        apellido,
+                        empresa,
+                        email,
+                        telefono
+                    }
+                }
+            })
+            // console.log(data)
+            // Mostrar alerta
+            Swal.fire(
+                'Actualizado!',
+                'El cliente se actualizó correctamente',
+                'success'
+            )
+            // Redireccionar
+            router.push('/')
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
 
     return (
         <Layout>
-            <h1 className='text-2xl text-gray-400 font-light'>Página de edición de cliente</h1>
+            <h1 className='text-2xl text-gray-400 font-light'>Página de edición de cliente - <span className='font-semibold'>{data.obtenerCliente.nombre}</span></h1>
 
             <div className='flex justify-center mt-5'>
                 <div className='w-full max-w-lg'>
                     <Formik
                         validationSchema={schemaValidacion}
-
+                        enableReinitialize
+                        initialValues={obtenerCliente}
+                        onSubmit={async (valores) => {
+                            console.log(valores);
+                            actualizarInfoCliente(valores)
+                        }
+                        }
                     >
                         {props => {
-
-                            console.log(props);
-
+                            // console.log(props);
                             return (
                                 <form
                                     onSubmit={props.handleSubmit}
@@ -92,7 +131,7 @@ const EditarClientePage = () => {
                                             id='nombre'
                                             type='text'
                                             placeholder='Nombre cliente'
-                                            // value={formik.values.nombre}
+                                            value={props.values.nombre}
                                             onChange={props.handleChange}
                                             onBlur={props.handleBlur}
 
@@ -116,7 +155,7 @@ const EditarClientePage = () => {
                                             id='apellido'
                                             type='text'
                                             placeholder='Apellido cliente'
-                                            // value={formik.values.apellido}
+                                            value={props.values.apellido}
                                             onChange={props.handleChange}
                                             onBlur={props.handleBlur}
                                         />
@@ -140,7 +179,7 @@ const EditarClientePage = () => {
                                             id='empresa'
                                             type='text'
                                             placeholder='Empresa cliente'
-                                            // value={formik.values.empresa}
+                                            value={props.values.empresa}
                                             onChange={props.handleChange}
                                             onBlur={props.handleBlur}
                                         />
@@ -164,7 +203,7 @@ const EditarClientePage = () => {
                                             id='email'
                                             type='email'
                                             placeholder='Email cliente'
-                                            // value={formik.values.email}
+                                            value={props.values.email}
                                             onChange={props.handleChange}
                                             onBlur={props.handleBlur}
                                         />
@@ -187,7 +226,7 @@ const EditarClientePage = () => {
                                             id='telefono'
                                             type='tel'
                                             placeholder='Teléfono cliente'
-                                            // value={formik.values.telefono}
+                                            value={props.values.telefono}
                                             onChange={props.handleChange}
                                             onBlur={props.handleBlur}
                                         />
@@ -208,7 +247,6 @@ const EditarClientePage = () => {
 
                                     />
                                 </form>)
-
                         }}
                     </Formik>
                     {/* {
