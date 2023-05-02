@@ -40,15 +40,9 @@ const EditarProductoPage = () => {
     })
 
     const [actualizarProducto] = useMutation(ACTUALIZAR_PRODUCTO)
-
-    if (loading) return (
-        <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Cargando...</h4>
-    )
-
     // console.log(data)
 
     const { obtenerProducto } = data
-
     const actualizarInfoProducto = async valores => {
         const { nombre, existencia, precio } = valores
 
@@ -64,6 +58,19 @@ const EditarProductoPage = () => {
                 }
             })
 
+            // if (!data) return (
+            //     <Layout>
+            //         <h1 className="text-2xl text-gray-400 font-light">Editar Producto</h1>
+            //         <div className="flex justify-center mt-5">
+            //             <div className="w-full max-w-lg">
+            //                 <div className="bg-white shadow-md px-8 pt-6 pb-8 mb-4">
+            //                     <p className="text-center text-gray-600">No se pudo obtener la informacion del producto</p>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </Layout>
+            // )
+
             Swal.fire(
                 'Actualizado',
                 'El producto se actualizo correctamente',
@@ -71,12 +78,19 @@ const EditarProductoPage = () => {
             )
             router.push('/productos')
 
+
             // console.log(data)
 
         } catch (error) {
             console.log(error)
         }
     }
+
+    if (loading) return (
+        <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Cargando...</h4>
+    )
+
+
 
     return (
         <Layout>
@@ -88,14 +102,12 @@ const EditarProductoPage = () => {
             <Formik
                 enableReinitialize
                 initialValues={obtenerProducto}
-                // validationSchema={schemaValidacion}
                 onSubmit={async valores => {
                     actualizarInfoProducto(valores)
                 }}
             >
                 {props => {
                     return (
-
                         <form
                             className="bg-white shadow-md p-8 mt-4"
                             onSubmit={props.handleSubmit}
@@ -149,9 +161,7 @@ const EditarProductoPage = () => {
                                     value={props.values.precio}
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-
                                 />
-
                             </div>
 
                             <input
@@ -162,7 +172,6 @@ const EditarProductoPage = () => {
                         </form>
                     )
                 }
-
                 }
             </Formik>
         </Layout>

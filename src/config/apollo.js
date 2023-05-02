@@ -30,7 +30,7 @@ const client = new ApolloClient({
 
 export default client;
 
-// let client 
+
 // if (typeof window !== 'undefined') {
 //   const httpLink = createHttpLink({
 //     uri: process.env.NEXT_PUBLIC_GRAPHQL_API,
