@@ -1,11 +1,73 @@
+import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
+const ELIMINAR_PRODUCTO = gql`
+mutation eliminarProducto($id: ID!){
+    eliminarProducto(id : $id)
+}
+`
 
+const OBTENER_PRODUCTOS = gql`
+query obtenerProductos{
+    obtenerProductos{
+        id
+        nombre
+        precio
+        existencia
+    }
+}
+`
 
 export const Producto = ({ producto }) => {
 
     const { nombre, existencia, precio, id} = producto;
     const router = useRouter();
+
+    const [eliminarProductoMutation] = useMutation(ELIMINAR_PRODUCTO, {
+        update(cache) {
+            const { obtenerProductos } = cache.readQuery({
+                query: OBTENER_PRODUCTOS
+            })
+
+            cache.writeQuery({
+                query: OBTENER_PRODUCTOS,
+                data: {
+                    obtenerProductos: obtenerProductos.filter(productoActual => productoActual.id !== id)
+                }
+            })
+        }
+    });
+
+    const eliminarProducto = async id => {
+        Swal.fire({
+            title: 'Deseas eliminar el producto?',
+            text: "Esta acción no se puede desacer!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await eliminarProductoMutation({
+                        variables: {
+                            id
+                        }
+                    })
+                    Swal.fire(
+                        'Eliminado!',
+                        data.eliminarProducto,
+                        'success'
+                    )
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        })
+    }
 
     const editarProducto = () => {
         console.log('editando producto')
@@ -13,12 +75,6 @@ export const Producto = ({ producto }) => {
             pathname: "/editar-producto/[id]",
             query: { id }
         })
-    }
-
-    const eliminarProducto = id => {
-        console.log('eliminando producto')
-        
-
     }
 
     return (
