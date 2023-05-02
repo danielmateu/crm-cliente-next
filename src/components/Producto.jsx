@@ -21,7 +21,7 @@ query obtenerProductos{
 
 export const Producto = ({ producto }) => {
 
-    const { nombre, existencia, precio, id} = producto;
+    const { nombre, existencia, precio, id } = producto;
     const router = useRouter();
 
     const [eliminarProductoMutation] = useMutation(ELIMINAR_PRODUCTO, {
@@ -70,7 +70,7 @@ export const Producto = ({ producto }) => {
     }
 
     const editarProducto = () => {
-        console.log('editando producto')
+        // console.log('editando producto')
         router.push({
             pathname: "/editar-producto/[id]",
             query: { id }
@@ -78,16 +78,19 @@ export const Producto = ({ producto }) => {
     }
 
     return (
-        <tr>
+        <tr  className='hover:bg-gray-100'>
             <td className='border px-4 py-2 '>{nombre}</td>
-            <td className='border px-4 py-2'>{existencia} {
+            <td className='border px-4 py-2'> {
                 existencia > 1 ? (
-                    <span className='text-green-600 font-bold'>  Uds</span>
+                    <span className='text-green-600 font-bold flex items-center justify-center'>{existencia}  Uds</span>
                 ) : (
-                    <span className='text-red-600 font-bold'>  Ud</span>
+                    <span className='text-red-600 font-bold flex items-center justify-center'>{existencia}  Ud</span>
                 )
             }</td>
-            <td className='border px-4 py-2'>{precio} €</td>
+            <td className='border px-4 py-2 '>
+                <span className=' font-semibold flex items-center justify-center'>{precio} €</span>
+
+            </td>
             <td className='border px-4 py-2'>
                 <button
                     type='button'

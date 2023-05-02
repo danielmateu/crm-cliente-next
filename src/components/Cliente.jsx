@@ -84,11 +84,15 @@ export const Cliente = ({ cliente }) => {
     }
 
     return (
-        <tr>
-            <td className='border px-4 py-2 '>{nombre} {apellido}</td>
-            <td className='border px-4 py-2'>{empresa}</td>
-            <td className='border px-4 py-2'>{email}</td>
-            <td className='border px-4 py-2 '>{telefono}</td>
+        <tr className='hover:bg-gray-100'>
+            <td className='border px-4 py-2 '>
+                <span className="flex items-center font-semibold">{nombre} {apellido}</span> </td>
+            <td className='border px-4 py-2'>
+                <span className="flex items-center justify-center">{empresa}</span></td>
+            <td className='border px-4 py-2'>
+                <span className="flex items-center justify-center">{email}</span></td>
+            <td className='border px-4 py-2 '>
+                <span className="flex items-center justify-center">{telefono}</span></td>
             <td className='border px-4 py-2'>
                 <button
                     type='button'

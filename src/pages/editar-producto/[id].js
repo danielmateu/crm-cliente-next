@@ -109,7 +109,6 @@ const EditarProductoPage = () => {
                                 <input
                                     type="text"
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-
                                     id="nombre"
                                     placeholder="Nombre Producto"
                                     value={props.values.nombre}
@@ -127,7 +126,6 @@ const EditarProductoPage = () => {
                                 <input
                                     type="number"
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-
                                     id="existencia"
                                     placeholder="Cantidad disponible"
                                     value={props.values.existencia}
@@ -167,8 +165,6 @@ const EditarProductoPage = () => {
 
                 }
             </Formik>
-
-
         </Layout>
     )
 }
