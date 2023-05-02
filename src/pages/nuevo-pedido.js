@@ -19,11 +19,15 @@ const NuevoPedidoPage = () => {
         <Layout>
             <h1 className='text-2xl text-gray-400 font-light'>Nuevo Pedido</h1>
 
-            <AsignarCliente
-                cliente={cliente}
-            />
+            <div className='flex justify-center mt-5'>
+                <div className='w-full max-w-lg'>
+                    <AsignarCliente
+                        cliente={cliente} />
+                    <AsignarProductos />
+                </div>
 
-            <AsignarProductos/>
+            </div>
+
         </Layout>
     )
 }

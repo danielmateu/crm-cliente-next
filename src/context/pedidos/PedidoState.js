@@ -20,10 +20,30 @@ const PedidoState = ({ children }) => {
         dispatch({
             type: SELECCIONAR_CLIENTE,
             payload: cliente
-            
+
         })
     }
 
+    // Modifica los productos
+    const agregarProducto = productosSeleccionados => {
+        // console.log(productosSeleccionados);
+        let nuevoState
+        if (state.productos.length > 0) {
+            // Tomar del segundo arreglo, una copia para asignarlo al primero
+            nuevoState = productosSeleccionados.map(producto => {
+                const nuevoObjeto = state.productos.find(productoState => productoState.id === producto.id)
+                return { ...producto, ...nuevoObjeto }
+            })
+        } else {
+            nuevoState = productosSeleccionados
+        }
+
+        dispatch({
+            type: SELECCIONAR_PRODUCTO,
+            payload: nuevoState
+        })
+
+    }
 
     return(
         <PedidoContext.Provider
@@ -33,7 +53,8 @@ const PedidoState = ({ children }) => {
                 total: state.total,
                 dispatch,
 
-                agregarCliente
+                agregarCliente,
+                agregarProducto
 
 
             }}
