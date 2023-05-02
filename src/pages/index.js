@@ -34,10 +34,6 @@ export const Home = () => {
     return router.push('/login')
   }
 
-  const vistaProtegida = () => {
-    router.push('/login')
-  }
-
   return (
     <>
       {
@@ -51,7 +47,6 @@ export const Home = () => {
                 <>
                   <h1 className='text-2xl text-gray-400 font-light'>Clientes</h1>
                   <div className='animate__animated animate__fadeIn' >
-
                     <table className='table-auto shadow-md mt-6 '>
                       <thead className='bg-gray-800'>
                         <tr className='text-white'>
@@ -86,7 +81,8 @@ export const Home = () => {
           </Layout>
 
         ) : (
-          vistaProtegida()
+          // Si el usuario no esta autenticado, redireccionar al login
+          router.push('/login')
         )
       }
     </>
