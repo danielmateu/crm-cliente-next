@@ -35,7 +35,22 @@ const NuevoProductoPage = () => {
     const [mensaje, setMensaje] = useState(null)
     const router = useRouter()
 
-    const [nuevoProducto] = useMutation(NUEVO_PRODUCTO)
+    const [nuevoProducto] = useMutation(NUEVO_PRODUCTO, {
+        update(cache, { data: { nuevoProducto } }) {
+            // Obtener el objeto de cache que deseamos actualizar
+            const { obtenerProductos } = cache.readQuery({ query: OBTENER_PRODUCTOS })
+
+            // Reescribir ese objeto
+            cache.writeQuery({
+                query: OBTENER_PRODUCTOS,
+                data: {
+                    obtenerProductos: [...obtenerProductos, nuevoProducto]
+
+                }
+            })
+
+        }
+    })
 
     const formik = useFormik({
         initialValues: {
@@ -77,6 +92,20 @@ const NuevoProductoPage = () => {
         }
 
     })
+
+    const mostrarMensaje = () => {
+        return (
+            // <div className='bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto'>
+            <div className={
+                mensaje.includes('correctamente') ?
+                    'bg-green-400 py-2 px-3 w-full my-3 max-w-sm text-center mx-auto' :
+                    'bg-red-400 py-2 px-3 w-full my-3 max-w-sm text-center mx-auto'
+            }>
+                <p>{mensaje}</p>
+            </div>
+        )
+
+    }
 
     return (
         <Layout>
@@ -171,25 +200,7 @@ const NuevoProductoPage = () => {
 
                     </form>
 
-                    {
-                        mensaje && (
-                            <>
-                                {/* Si el mensaje incluye correctamente */}
-                                {
-                                    mensaje.includes('correctamente') ? (
-                                        <p className='bg-green-500 text-white p-6 text-center rounded-xl'
-                                        >{mensaje}</p>
-
-                                    ) : (
-
-                                        <p className='bg-red-500 text-white p-6 text-center rounded-xl'
-                                        >{mensaje}</p>
-                                    )
-                                }
-                            </>
-
-                        )
-                    }
+                    {mensaje && mostrarMensaje()}
 
                 </div>
             </div>
