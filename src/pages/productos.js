@@ -15,54 +15,11 @@ query obtenerProductos{
 }
 `
 
-const ELIMINAR_PRODUCTO = gql`
-mutation eliminarProducto($id: ID!){
-    eliminarProducto(id : $id)
-}
-`
-
 const ProductosPage = () => {
 
     const { data, loading, error } = useQuery(OBTENER_PRODUCTOS)
 
     const { obtenerProductos } = data || { obtenerProductos: [] }
-
-    // const eliminarProducto = (id) => {
-
-    //     Swal.fire({
-    //         title: 'Deseas eliminar al producto?',
-    //         text: "Esta acción no se puede desacer!",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#3085d6',
-    //         cancelButtonColor: '#d33',
-    //         confirmButtonText: 'Si, eliminar!',
-    //         cancelButtonText: 'Cancelar'
-    //     }).then(async (result) => {
-    //         if (result.isConfirmed) {
-
-    //             const { data } = await eliminarProductoMutation({
-    //                 variables: {
-    //                     id
-
-    //                 }
-    //             })
-
-    //             Swal.fire(
-    //                 'Producto Eliminado!',
-    //                 data.eliminarCliente,
-    //                 'success'
-    //             )
-
-    //             console.log(data)
-    //         }
-    //     })
-    // }
-
-    // const editarProducto = () => {
-    //     console.log('A editar!');
-
-    // }
 
     if (loading) return (
         <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Cargando...</h4>
@@ -111,8 +68,6 @@ const ProductosPage = () => {
                 )
             }
         </>
-
-
     )
 }
 

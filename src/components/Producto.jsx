@@ -80,7 +80,13 @@ export const Producto = ({ producto }) => {
     return (
         <tr>
             <td className='border px-4 py-2 '>{nombre}</td>
-            <td className='border px-4 py-2'>{existencia}</td>
+            <td className='border px-4 py-2'>{existencia} {
+                existencia > 1 ? (
+                    <span className='text-green-600 font-bold'>  Uds</span>
+                ) : (
+                    <span className='text-red-600 font-bold'>  Ud</span>
+                )
+            }</td>
             <td className='border px-4 py-2'>{precio} €</td>
             <td className='border px-4 py-2'>
                 <button

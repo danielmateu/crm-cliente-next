@@ -71,7 +71,7 @@ const EditarProductoPage = () => {
             )
             router.push('/productos')
 
-            console.log(data)
+            // console.log(data)
 
         } catch (error) {
             console.log(error)
