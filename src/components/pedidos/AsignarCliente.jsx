@@ -1,14 +1,8 @@
+import PedidoContext from "@/context/pedidos/PedidoContext"
 import { gql, useQuery } from "@apollo/client"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Select from "react-select"
 
-
-
-// const clientes = [
-//     { id: 1, nombre: 'Daniel' },
-//     { id: 2, nombre: 'Mateu' },
-//     { id: 3, nombre: 'Daniel Mateu' }
-// ]
 
 const OBTENER_CLIENTES_USUARIO = gql`
 query obtenerClientesVendedor{
@@ -24,13 +18,19 @@ query obtenerClientesVendedor{
 export const AsignarCliente = () => {
 
     const [cliente, setCliente] = useState([])
+
+    const pedidoContext = useContext(PedidoContext)
+    const { agregarCliente } = pedidoContext
+
     const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO)
 
     const clientes = data?.obtenerClientesVendedor
 
     useEffect(() => {
-        console.log(clientes)
-    }, [clientes])
+        // console.log(clientes)
+        agregarCliente(cliente)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cliente])
 
     const seleccionarCliente = sabor => {
         setCliente(sabor)

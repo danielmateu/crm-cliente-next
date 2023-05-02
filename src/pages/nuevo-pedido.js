@@ -1,5 +1,6 @@
 import { Layout } from '@/components/Layout'
 import { AsignarCliente } from '@/components/pedidos/AsignarCliente'
+import { AsignarProductos } from '@/components/pedidos/AsignarProductos'
 import PedidoContext from '@/context/pedidos/PedidoContext'
 import { useContext } from 'react'
 
@@ -21,6 +22,8 @@ const NuevoPedidoPage = () => {
             <AsignarCliente
                 cliente={cliente}
             />
+
+            <AsignarProductos/>
         </Layout>
     )
 }

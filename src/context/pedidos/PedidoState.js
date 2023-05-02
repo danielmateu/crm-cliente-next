@@ -14,20 +14,28 @@ const PedidoState = ({ children }) => {
 
     const [state, dispatch] = useReducer(PedidoReducer, initialState)
 
-    const holamundoEnUseReducer = () => {
-        console.log('Hola mundo desde useReducer');
-    }
     // Modifica el cliente
+    const agregarCliente = cliente => {
+        // console.log('Cliente');
+        dispatch({
+            type: SELECCIONAR_CLIENTE,
+            payload: cliente
+            
+        })
+    }
 
 
     return(
         <PedidoContext.Provider
             value={{
-                holamundoEnUseReducer,
                 cliente: state.cliente,
                 productos: state.productos,
                 total: state.total,
-                dispatch
+                dispatch,
+
+                agregarCliente
+
+
             }}
         >
             {children}
