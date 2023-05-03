@@ -28,11 +28,13 @@ export const AsignarProductos = () => {
         // Funcion para pasar a PedidoState
         // console.log(productos)
         agregarProducto(productos)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productos])
 
 
     const seleccionarProducto = (opcion) => {
-        console.log(opcion)
+        // console.log(opcion)
+        setProductos(opcion)
     }
 
     if (loading) return 'Cargando...'
