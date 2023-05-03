@@ -3,21 +3,8 @@ import PedidoContext from "@/context/pedidos/PedidoContext"
 
 export const Total = () => {
 
-    const [total, setTotal] = useState(0)
-
     const pedidoContext = useContext(PedidoContext)
-    const { productos } = pedidoContext
-
-    useEffect(() => {
-        actualizarTotal()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [productos])
-
-    const actualizarTotal = () => {
-        let nuevoTotal = 0
-        productos.map(producto => nuevoTotal += (producto.precio * producto.cantidad))
-        setTotal(nuevoTotal)
-    }
+    const { total } = pedidoContext
 
     return (
         <div

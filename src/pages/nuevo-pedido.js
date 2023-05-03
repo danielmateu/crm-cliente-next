@@ -9,11 +9,16 @@ const NuevoPedidoPage = () => {
     // Utilizar context y utilizar sus valores
     const pedidoContext = useContext(PedidoContext)
     // console.log(pedidoContext);
-    const { cliente } = pedidoContext
+    const { cliente, productos, total } = pedidoContext
     // console.log(cliente);
 
-    const registrarPedido = () => {
-        console.log(cliente, 'Registrar pedido');
+    // const registrarPedido = () => {
+    //     console.log(cliente, 'Registrar pedido');
+    // }
+
+    const validarPedido = () => {
+        // return !cliente?.id || productos.length === 0 || total === 0
+        return !productos.every(producto => producto.cantidad > 0) || total === 0 || cliente.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
     }
 
     return (
@@ -31,8 +36,8 @@ const NuevoPedidoPage = () => {
 
                     <button
                         type='button'
-                        className={`bg-gray-800 w-full mt-5 p-2 text-white font-semibold hover:bg-gray-900 rounded-xl`}
-                        onClick={registrarPedido}
+                        className={`${validarPedido()}bg-gray-800 w-full mt-5 p-2 text-white font-semibold  rounded-xl `}
+                        onClick={validarPedido}
                     >
                         Registrar Pedido
                     </button>
