@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import PedidoContext from "./PedidoContext";
-import { CANTIDAD_PRODUCTOS, SELECCIONAR_CLIENTE, SELECCIONAR_PRODUCTO } from "@/types";
 import { PedidoReducer } from "./PedidoReducer";
+import { CANTIDAD_PRODUCTOS, SELECCIONAR_CLIENTE, SELECCIONAR_PRODUCTO } from "@/types";
 
 const PedidoState = ({ children }) => {
 
@@ -45,6 +45,15 @@ const PedidoState = ({ children }) => {
 
     }
 
+    // Modifica las cantidades de los productos
+    const cantidadProductos = nuevoProducto => {
+        dispatch({
+            type: CANTIDAD_PRODUCTOS,
+            payload: nuevoProducto
+        })
+
+    }
+
     return(
         <PedidoContext.Provider
             value={{
@@ -54,7 +63,8 @@ const PedidoState = ({ children }) => {
                 dispatch,
 
                 agregarCliente,
-                agregarProducto
+                agregarProducto,
+                cantidadProductos
 
 
             }}

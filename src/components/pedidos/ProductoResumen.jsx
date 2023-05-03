@@ -13,11 +13,11 @@ export const ProductoResumen = ({ producto }) => {
 
     const actualizarCantidad = () => {
         const nuevoProducto = { ...producto, cantidad: Number(cantidad) }
-        cantidadProductos(nuevoProducto)
+        // cantidadProductos(nuevoProducto)
     }
 
     const pedidoContext = useContext(PedidoContext)
-    const { cantidadProductos } = pedidoContext
+    // const { cantidadProductos } = pedidoContext
 
     return (
         <div className='flex flex-row justify-between  p-2 hover:bg-gray-100 hover:text-gray-700 transition-all ease-in-out'>

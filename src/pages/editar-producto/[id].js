@@ -58,6 +58,10 @@ const EditarProductoPage = () => {
         <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Cargando...</h4>
     )
 
+    if(!data) return (
+        <h4 className='text-2xl bg-gray-800 font-light text-center justify-center h-screen text-white py-60'>Acción no permitida</h4>
+    )
+
     const actualizarInfoProducto = async valores => {
         // console.log(valores);
         const { nombre, existencia, precio } = valores
