@@ -7,8 +7,13 @@ export const ProductoResumen = ({ producto }) => {
 
     const { nombre, existencia, precio } = producto
     const [cantidad, setCantidad] = useState(0)
+
+    const pedidoContext = useContext(PedidoContext)
+    const { cantidadProductos, actualizarTotal } = pedidoContext
+
     useEffect(() => {
         actualizarCantidad()
+        actualizarTotal()
     }, [cantidad])
 
     const actualizarCantidad = () => {
@@ -16,12 +21,8 @@ export const ProductoResumen = ({ producto }) => {
         cantidadProductos(nuevoProducto)
     }
 
-    const pedidoContext = useContext(PedidoContext)
-    const { cantidadProductos } = pedidoContext
-    
-
     return (
-        <div className='flex flex-row justify-between  p-2 hover:bg-gray-100 hover:text-gray-700 transition-all ease-in-out'>
+        <div className='flex flex-row justify-between  p-2 hover:bg-gray-100 rounded-lg hover:text-gray-700 transition-all ease-in-out'>
             <p className='text-sm'>{nombre}</p>
             <p className='text-sm '>{precio} €</p>
             <input
@@ -29,7 +30,7 @@ export const ProductoResumen = ({ producto }) => {
                 placeholder='Cantidad'
                 min={0}
                 max={existencia}
-                className='outline-none border-gray-400 rounded-md w-3/12 text-center text-gray-700 bg-gray-500'
+                className='outline-none border-gray-400 rounded-md w-3/12 text-center  bg-gray-500 text-white'
                 onChange={e => setCantidad(e.target.value)}
                 value={cantidad}
             />

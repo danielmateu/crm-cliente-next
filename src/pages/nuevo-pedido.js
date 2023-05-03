@@ -31,7 +31,7 @@ const NuevoPedidoPage = () => {
 
                     <button
                         type='button'
-                        className='bg-gray-800 w-full mt-5 p-2 text-white font-semibold hover:bg-gray-900 rounded-xl'
+                        className={`bg-gray-800 w-full mt-5 p-2 text-white font-semibold hover:bg-gray-900 rounded-xl`}
                         onClick={registrarPedido}
                     >
                         Registrar Pedido
