@@ -1,6 +1,6 @@
 import PedidoContext from '@/context/pedidos/PedidoContext'
 import { gql, useQuery } from '@apollo/client'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Select from 'react-select'
 
 const OBTENER_PRODUCTOS = gql`
@@ -28,7 +28,7 @@ export const AsignarProductos = () => {
         // Funcion para pasar a PedidoState
         // console.log(productos)
         agregarProducto(productos)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productos])
 
 
@@ -49,7 +49,7 @@ export const AsignarProductos = () => {
                 isMulti={true}
                 onChange={opcion => seleccionarProducto(opcion)}
                 getOptionValue={opciones => opciones.id}
-                getOptionLabel={opciones => `${opciones.nombre} - ${opciones.existencia} disponibles`}
+                getOptionLabel={opciones => `${opciones.nombre} - ${opciones.existencia} unidades`}
                 placeholder='Seleccione el producto'
                 noOptionsMessage={() => 'No hay resultados'}
             />

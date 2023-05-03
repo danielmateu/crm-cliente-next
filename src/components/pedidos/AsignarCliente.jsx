@@ -2,11 +2,12 @@ import PedidoContext from "@/context/pedidos/PedidoContext"
 import { gql, useQuery } from "@apollo/client"
 import { useContext, useEffect, useState } from "react"
 import Select from "react-select"
-
+import 'animate.css';
 
 const OBTENER_CLIENTES_USUARIO = gql`
 query obtenerClientesVendedor{
     obtenerClientesVendedor{
+        id
         nombre
         apellido
         empresa
@@ -44,6 +45,7 @@ export const AsignarCliente = () => {
         <div className="flex flex-col gap-2">
             <p className='mt-3'>1.- Asigna un cliente al pedido</p>
             <Select
+                className=''
                 options={obtenerClientesVendedor}
                 // isMulti={true}
                 onChange={opcion => seleccionarCliente(opcion)}

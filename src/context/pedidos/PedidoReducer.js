@@ -1,4 +1,4 @@
-import { SELECCIONAR_PRODUCTO, SELECCIONAR_CLIENTE, CANTIDAD_PRODUCTOS } from "@/types"
+import { CANTIDAD_PRODUCTOS, SELECCIONAR_CLIENTE, SELECCIONAR_PRODUCTO, } from "@/types"
 
 export const PedidoReducer = (state, action) => {
 

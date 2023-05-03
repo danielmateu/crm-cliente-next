@@ -20,7 +20,6 @@ const PedidoState = ({ children }) => {
         dispatch({
             type: SELECCIONAR_CLIENTE,
             payload: cliente
-
         })
     }
 
@@ -51,22 +50,16 @@ const PedidoState = ({ children }) => {
             type: CANTIDAD_PRODUCTOS,
             payload: nuevoProducto
         })
-
     }
 
     return(
         <PedidoContext.Provider
             value={{
-                cliente: state.cliente,
-                productos: state.productos,
-                total: state.total,
-                dispatch,
+                ...state,
 
                 agregarCliente,
                 agregarProducto,
                 cantidadProductos
-
-
             }}
         >
             {children}
