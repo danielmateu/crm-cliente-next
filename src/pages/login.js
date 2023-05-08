@@ -54,14 +54,15 @@ const LoginPage = () => {
                 setMensaje(`Logueado correctamente...`)
 
                 // Guardar token en localstorage
-                const { token } = data.autenticarUsuario
-                localStorage.setItem('token', token)
+                setTimeout(() => {
+                    const { token } = data.autenticarUsuario
+                    localStorage.setItem('token', token)
+                }, 1000);
 
-                // Redireccionar a clientes
-                router.push('/')
-                // setTimeout(() => {
-
-                // }, 3000);
+                setTimeout(() => {
+                    setMensaje(null)
+                    router.push('/')
+                }, 2000);
 
             } catch (error) {
                 setMensaje(error.message.replace('ApolloError: ', ''))
