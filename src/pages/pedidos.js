@@ -1,7 +1,37 @@
 import { Layout } from '@/components/Layout'
+import { Pedido } from '@/components/Pedido'
 import Link from 'next/link'
+import 'animate.css';
 
-const pedidosPage = () => {
+import { gql, useQuery } from '@apollo/client'
+
+const OBTENER_PEDIDOS = gql`
+query obtenerPedidos {
+    obtenerPedidos{
+        id
+        pedido{
+            id
+            cantidad
+            nombre
+        }
+        cliente
+        vendedor
+        total
+        estado
+    }
+}
+`
+
+const PedidosPage = () => {
+
+    const { data, loading, error } = useQuery(OBTENER_PEDIDOS)
+
+    console.log(data);
+
+    const pedidos = data?.obtenerPedidos
+
+
+    if (loading) return 'Cargando...'
 
 
     return (
@@ -9,8 +39,21 @@ const pedidosPage = () => {
             <h1 className='text-2xl text-gray-400 font-light'>Pedidos</h1>
 
             {/* Si no hay pedidos */}
+            {
+                pedidos.length === 0 ? (
+                    <p className='mt-5 text-center text-2xl'>No hay pedidos aún</p>
+                ) : (
+                    <ul className='animate__animated animate__fadeIn mt-6'>
+                        {pedidos.map(pedido => (
+                            <Pedido
+                                key={pedido.id}
+                                pedido={pedido}
+                            />
+                        ))}
+                    </ul>
+                )
 
-            <p className='mt-5 text-center text-2xl'>No hay pedidos aún</p>
+            }
 
             <Link href='/nuevo-pedido'>
                 <button
@@ -22,4 +65,4 @@ const pedidosPage = () => {
     )
 }
 
-export default pedidosPage
+export default PedidosPage
