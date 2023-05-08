@@ -5,7 +5,8 @@ import fetch from 'node-fetch';
 
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:4000/',
+    // uri: 'http://localhost:4000/',
+    uri: 'https://young-beyond-83584.herokuapp.com/',
     fetch
 });
 
