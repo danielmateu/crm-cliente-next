@@ -33,7 +33,7 @@ const ProductosPage = () => {
                 data.obtenerProductos ? (<Layout>
                     <h1 className='text-2xl text-gray-400 font-light'>Productos</h1>
 
-                    <div className='animate__animated animate__fadeIn flex justify-center flex-col' >
+                    <div className='animate__animated animate__fadeIn flex justify-center flex-col overflow-x-scroll' >
                         <table className='table-auto shadow-md mt-6 '>
                             <thead className='bg-gray-800'>
                                 <tr className='text-white'>

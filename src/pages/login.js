@@ -50,7 +50,7 @@ const LoginPage = () => {
                     }
                 })
 
-                console.log(data)
+                // console.log(data)
                 setMensaje(`Logueado correctamente...`)
 
                 // Guardar token en localstorage
