@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { gql, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
@@ -8,57 +9,121 @@ mutation eliminarPedido($id :ID!){
 }
 `
 
+const ACTUALIZAR_PEDIDO = gql`
+mutation actualizarPedido($id: ID!, $input: PedidoInput){
+    actualizarPedido(id : $id, input : $input){
+        estado
+    }
+}
+`
+
+const OBTENER_PEDIDOS = gql`
+query obtenerPedidosVendedor {
+    obtenerPedidosVendedor{
+        id
+    }
+}
+`
+
 export const Pedido = ({ pedido }) => {
 
     const { id, total, cliente: { nombre, apellido, telefono, email }, estado } = pedido;
     // console.log(pedido);
+
+    // Mutation para cambiar el estado de un pedido
+    const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO)
+    // Mutation para eliminar un pedido
+    const [eliminarPedido] = useMutation(ELIMINAR_PEDIDO, {
+        update(cache) {
+            const { obtenerPedidosVendedor } = cache.readQuery({
+                query: OBTENER_PEDIDOS
+            })
+
+            cache.writeQuery({
+                query: OBTENER_PEDIDOS,
+                data: {
+                    obtenerPedidosVendedor: obtenerPedidosVendedor.filter(pedido => pedido.id !== id)
+                }
+            })
+        }
+    })
+
     const [estadoPedido, setEstadoPedido] = useState(estado)
+    const [clase, setClase] = useState('')
 
     useEffect(() => {
         if (estadoPedido) {
             setEstadoPedido(estadoPedido)
         }
+        clasePedido()
     }, [estadoPedido])
-
-    const handleChange = e => {
-        // console.log(e.target.value);
-        setEstadoPedido(e.target.value)
+    // FUncion que modifica el color del pedido de acuerdo a su estado
+    const clasePedido = () => {
+        if (estadoPedido === 'PENDIENTE') {
+            setClase('border-yellow-500')
+        } else if (estadoPedido === 'COMPLETADO') {
+            setClase('border-green-500')
+        } else {
+            setClase('border-red-800')
+        }
     }
 
-    const eliminarPedido = () => {
-        console.log('eliminando pedido');
-        // Swal.fire({
-        //     title: '¿Deseas eliminar este pedido?',
-        //     text: "Esta acción no se puede deshacer",
-        //     icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#10B981',
-        //     cancelButtonColor: '#EF4444',
-        //     confirmButtonText: 'Confirmar',
-        //     cancelButtonText: 'Cancelar'
-        // }).then(async (result) => {
-        //     if (result.isConfirmed) {
-        //         try {
-        //             const { data } = await eliminarPedido({
-        //                 variables: {
-        //                     id
-        //                 }
-        //             })
-        //             console.log(data);
-        //             Swal.fire(
-        //                 'Eliminado',
-        //                 data.eliminarPedido,
-        //                 'success'
-        //             )
-        //         } catch (error) {
-        //             console.log(error);
-        //         }
-        //     }
-        // })
+    const cambiarEstadoPedido = async nuevoEstado => {
+        try {
+            const { data } = await actualizarPedido({
+                variables: {
+                    id,
+                    input: {
+                        estado: nuevoEstado,
+                        cliente: pedido.cliente.id
+                    }
+                }
+            })
+            // console.log(data);
+            setEstadoPedido(data.actualizarPedido.estado)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    const confirmarEliminarPedido = () => {
+        // console.log('eliminando pedido');
+        Swal.fire({
+            title: '¿Deseas eliminar este pedido?',
+            text: "Esta accion no se puede deshacer",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#10B981',
+            cancelButtonColor: '#EF4444',
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    // Eliminar por ID
+                    const { data } = await eliminarPedido({
+                        variables: {
+                            id
+                        }
+                    })
+                    // console.log(data);
+                    Swal.fire(
+                        'Eliminado!',
+                        data.eliminarPedido,
+                        'success'
+                    )
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+        )
+
     }
 
     return (
-        <main className='flex justify-between bg-gray-200 p-4 rounded mb-4 shadow-lg'>
+        <main className={`${clase} border-t-4 flex justify-between bg-gray-200 p-4 rounded mb-4 shadow-lg`}>
             <div className='flex flex-col gap-1 mb-4 '>
                 <p className='font-semibold flex'>Cliente: {nombre} {apellido}</p>
                 {
@@ -75,7 +140,7 @@ export const Pedido = ({ pedido }) => {
                 {/* <p>Estado pedido: </p> */}
                 <select name="" id="" className='p-2 appearance-none rounded leading-tight outline-none mt-2'
                     value={estadoPedido}
-                    onChange={handleChange}
+                    onChange={e => cambiarEstadoPedido(e.target.value)}
                 >
                     <option
                         value="PENDIENTE"
@@ -105,7 +170,7 @@ export const Pedido = ({ pedido }) => {
 
                 <button
                     className="bg-red-400 hover:bg-red-600 py-2 px-5 rounded text-white  transition-all ease-in-out"
-                    onClick={eliminarPedido}
+                    onClick={confirmarEliminarPedido}
                 >
                     Eliminar Pedido
                 </button>

@@ -14,6 +14,30 @@ mutation nuevoPedido($input: PedidoInput){
     }
 }
 `
+
+const OBTENER_PEDIDOS = gql`
+query obtenerPedidosVendedor {
+    obtenerPedidosVendedor{
+        id
+        pedido{
+            id
+            cantidad
+            nombre
+        }
+        cliente{
+            id
+            nombre
+            apellido
+            email
+            telefono
+        }
+        vendedor
+        total
+        estado
+    }
+}
+`
+
 const NuevoPedidoPage = () => {
 
     const router = useRouter()
@@ -24,7 +48,20 @@ const NuevoPedidoPage = () => {
     // console.log(pedidoContext);
     const { cliente, productos, total } = pedidoContext
     // Mutation para crear un nuevo pedido
-    const [nuevoPedido] = useMutation(NUEVO_PEDIDO)
+    const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
+        update(cache, { data: { nuevoPedido } }) {
+            // Obtener el objeto de cache que deseamos actualizar
+            const { obtenerPedidosVendedor } = cache.readQuery({ query: OBTENER_PEDIDOS })
+
+            // Reescribimos el cache (el cache nunca se debe modificar)
+            cache.writeQuery({
+                query: OBTENER_PEDIDOS,
+                data: {
+                    obtenerPedidosVendedor: [...obtenerPedidosVendedor, nuevoPedido]
+                }
+            })
+        }
+    })
 
     const crearNuevoPedido = async () => {
 

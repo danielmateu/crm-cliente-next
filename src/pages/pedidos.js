@@ -8,34 +8,34 @@ import { gql, useQuery } from '@apollo/client'
 const OBTENER_PEDIDOS_VENDEDOR = gql`
 query obtenerPedidosVendedor {
     obtenerPedidosVendedor{
-      id
-      pedido{
         id
-        cantidad
-        nombre
-      }
-      cliente{
-        id
-        nombre
-        apellido
-        email
-        telefono
-      }
-      vendedor
-      total
-      estado
+        pedido{
+            id
+            cantidad
+            nombre
+        }
+        cliente{
+            id
+            nombre
+            apellido
+            email
+            telefono
+        }
+        vendedor
+        total
+        estado
     }
-  }
+}
 `
 
 const PedidosPage = () => {
 
     const { data, loading, error } = useQuery(OBTENER_PEDIDOS_VENDEDOR)
 
-    console.log(data);
+    // console.log(data);
 
     const pedidos = data?.obtenerPedidosVendedor
-    console.log(pedidos);
+    // console.log(pedidos);
 
     if (loading) return 'Cargando...'
 
