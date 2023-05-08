@@ -5,31 +5,37 @@ import 'animate.css';
 
 import { gql, useQuery } from '@apollo/client'
 
-const OBTENER_PEDIDOS = gql`
-query obtenerPedidos {
-    obtenerPedidos{
+const OBTENER_PEDIDOS_VENDEDOR = gql`
+query obtenerPedidosVendedor {
+    obtenerPedidosVendedor{
+      id
+      pedido{
         id
-        pedido{
-            id
-            cantidad
-            nombre
-        }
-        cliente
-        vendedor
-        total
-        estado
+        cantidad
+        nombre
+      }
+      cliente{
+        id
+        nombre
+        apellido
+        email
+        telefono
+      }
+      vendedor
+      total
+      estado
     }
-}
+  }
 `
 
 const PedidosPage = () => {
 
-    const { data, loading, error } = useQuery(OBTENER_PEDIDOS)
+    const { data, loading, error } = useQuery(OBTENER_PEDIDOS_VENDEDOR)
 
     console.log(data);
 
-    const pedidos = data?.obtenerPedidos
-
+    const pedidos = data?.obtenerPedidosVendedor
+    console.log(pedidos);
 
     if (loading) return 'Cargando...'
 
